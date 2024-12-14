@@ -84,7 +84,7 @@ class ConfigurationManager:
         eval_config = EvaluationConfig(
             path_of_model="artifacts/training/model.h5",
             training_data="artifacts/data_ingestion/Chest-CT-Scan-data",
-            mlflow_uri="https://dagshub.com/entbappy/chest-Disease-Classification-MLflow-DVC.mlflow",
+            mlflow_uri= os.getenv("MLFLOW_TRACKING_URI"),
             all_params=self.params,
             params_image_size=self.params.IMAGE_SIZE,
             params_batch_size=self.params.BATCH_SIZE
