@@ -159,6 +159,9 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-artifacts/*
+artifacts/data_ingestion/*
+artifacts/prepare_base_model/*
+artifacts/training/*
+artifacts/evaluation/*
 logs/*
 mlruns/*
