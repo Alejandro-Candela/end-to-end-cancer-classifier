@@ -2,6 +2,10 @@ from pathlib import Path
 import tensorflow as tf
 import mlflow
 import mlflow.keras
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import numpy as np
+import matplotlib.pyplot as plt
+import os
 from urllib.parse import urlparse
 from cnnClassifier.entity.config_entity import EvaluationConfig
 from cnnClassifier.utils.common import read_yaml, create_directories,save_json
@@ -47,10 +51,29 @@ class Evaluation:
         self._valid_generator()
         self.score = self.model.evaluate(self.valid_generator)
         self.save_score()
+        self._save_confusion_matrix()
 
     def save_score(self):
         scores = {"loss": self.score[0], "accuracy": self.score[1]}
-        save_json(path=Path("scores.json"), data=scores)
+        save_json(path=Path("artifacts/evaluation/scores.json"), data=scores)
+        
+    def _save_confusion_matrix(self):
+        # Obtener predicciones y etiquetas reales
+        y_true = self.valid_generator.classes
+        y_pred = np.argmax(self.model.predict(self.valid_generator), axis=1)
+        class_labels = list(self.valid_generator.class_indices.keys())
+
+        # Generar la matriz de confusión
+        cm = confusion_matrix(y_true, y_pred)
+
+        # Visualizar la matriz de confusión
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_labels)
+        disp.plot(cmap=plt.cm.Blues)
+
+        # Guardar la imagen localmente
+        cm_image_path = "artifacts/evaluation/confusion_matrix.png"
+        plt.savefig(cm_image_path)
+        plt.close()
 
     
     def log_into_mlflow(self):
