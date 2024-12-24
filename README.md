@@ -87,11 +87,11 @@ El sistema desarrollado alcanzó una precisión del 99.02% en la detección de a
 
 3. **Ejecutar la aplicación web:**
    ```bash
-   uvicorn main:app --reload
+   python app.py
    ```
 
 4. **Abrir la interfaz:**
-   Accede a `http://localhost:8000` en tu navegador.
+   Accede a `http://localhost:8080` en tu navegador.
 
 ---
 
