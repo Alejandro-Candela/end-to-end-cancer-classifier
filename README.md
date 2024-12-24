@@ -1,122 +1,98 @@
-# End-to-End-Chest-Cancer-Classification-using-MLflow-DVC
+# Sistema de Detección Automatizada de Adenocarcinomas Pulmonares
 
-## Workflows
+## Descripción del Proyecto
 
-For each stage:
+Este trabajo desarrolla un sistema de detección automatizada de adenocarcinomas pulmonares mediante el análisis de imágenes médicas, implementado como una aplicación web. El sistema permite a los usuarios cargar imágenes a través de una interfaz intuitiva, las cuales son procesadas por una API que ejecuta un modelo de clasificación de imágenes basado en técnicas avanzadas de aprendizaje profundo. El modelo proporciona un diagnóstico binario sobre la presencia o ausencia de adenocarcinomas.
 
-1. Update config.yaml
-2. Update params.yaml
-3. Update the entity (config_entity.py)
-4. Update the configuration manager in src config (configuration.py)
-5. Update the components
-6. Update the pipeline 
-7. Update the main.py
+Además del objetivo clínico, este proyecto se centra en la creación de una plantilla modular y estructurada que abarca todas las etapas del flujo de trabajo típico en la clasificación de imágenes. La arquitectura propuesta integra componentes como:
+- Preprocesamiento de datos
+- Modelado
+- Despliegue
+- Gestión del código
 
-## MLflow
+Este enfoque garantiza escalabilidad, mantenibilidad y facilita la replicación del sistema para abordar problemas similares en el ámbito de la visión por computadora.
 
-##### cmd
-- mlflow ui
+## Metodología
 
-### dagshub
-[dagshub](https://dagshub.com/)
+### 1. Recopilación de Datos
+Se utilizó el conjunto de datos de adenocarcinoma pulmonar disponible en Kaggle, compuesto por imágenes categorizadas en dos clases:
+- Presencia de adenocarcinomas
+- Ausencia de adenocarcinomas
 
-### update credentials in .env
+Las imágenes fueron preprocesadas para ajustarse al tamaño requerido por la arquitectura VGG16 (224x224 píxeles) y normalizadas al rango [0, 1].
 
-### DVC cmd
+### 2. Aumento de Datos
+Para mejorar la generalización del modelo y evitar el sobreajuste, se implementaron técnicas de aumento de datos:
+- Rotaciones de hasta 15 grados
+- Escalado aleatorio
+- Traslación horizontal y vertical
+- Reflejo horizontal
 
-1. dvc init
-2. dvc repro
-3. dvc dag
-4. Update the dvc.yaml
+### 3. Modelo Utilizado
+Se utilizó la arquitectura VGG16 con pesos preentrenados en ImageNet. Las capas fully connected originales fueron reemplazadas por un clasificador denso que incluye:
+- Una capa completamente conectada con 256 unidades y activación ReLU
+- Dropout del 50% para reducir el sobreajuste
+- Una capa final con activación sigmoide para predicciones binarias
 
+### 4. Entrenamiento del Modelo
+El modelo fue entrenado utilizando:
+- Función de pérdida: `binary_crossentropy`
+- Optimizador: Adam (tasa de aprendizaje inicial: 0.01)
+- Épocas: 30
+- Tamaño de lote: 16
+- División del conjunto de datos: 80% para entrenamiento, 20% para validación
 
-## About MLflow & DVC
+### 5. Evaluación del Modelo
+Se evaluó el desempeño mediante las métricas de precisión (accuracy) y pérdida (loss) en el conjunto de validación. También se generaron gráficos para monitorear las curvas de precisión y pérdida durante el entrenamiento.
 
-MLflow
+## Resultados
 
- - Its Production Grade
- - Trace all of your expriements
- - Logging & taging your model
+### Principales Métricas
+- **Pérdida (loss):** 0.048
+- **Precisión (accuracy):** 99.02%
 
+### Observaciones
+- El modelo mostró una alta capacidad para distinguir entre imágenes con y sin adenocarcinomas.
+- Se identificaron falsos positivos y negativos principalmente en imágenes de baja resolución o con artefactos, resaltando la importancia de datos de alta calidad.
 
-DVC 
+### Gráficas
+Las curvas de precisión y pérdida mostraron una convergencia estable, evidenciando un buen ajuste sin signos significativos de sobreajuste.
 
- - Its very lite weight for POC only
- - lite weight expriements tracker
- - It can perform Orchestration (Creating Pipelines)
+## Conclusión
 
+El sistema desarrollado alcanzó una precisión del 99.02% en la detección de adenocarcinomas pulmonares. Además, la plantilla modular diseñada facilita su aplicación a otros problemas de clasificación de imágenes, ofreciendo un enfoque reutilizable y escalable.
 
+### Limitaciones
+- Sensibilidad a imágenes de baja resolución
+- Presencia de falsos positivos y negativos en ciertos escenarios
 
-# AWS-CICD-Deployment-with-Github-Actions
+### Futuras Líneas de Trabajo
+1. Integrar herramientas de explainability como Grad-CAM para interpretar las predicciones del modelo.
+2. Evaluar el sistema en un entorno clínico real con datos en tiempo real.
+3. Explorar técnicas adicionales como superresolución para mejorar la robustez frente a imágenes de baja calidad.
 
-## 1. Login to AWS console.
+## Cómo Usar Este Proyecto
 
-## 2. Create IAM user for deployment
+1. **Instalar dependencias:**
+   ```bash
+   conda env create -f environment.yml
+   conda activate cnn-cancer-classifier
+   ```
 
-	#with specific access
+2. **Ejecutar pipeline con DVC:**
+   ```bash
+   dvc init
+   dvc repro
+   ```
 
-	1. EC2 access : It is virtual machine
+3. **Ejecutar la aplicación web:**
+   ```bash
+   uvicorn main:app --reload
+   ```
 
-	2. ECR: Elastic Container registry to save your docker image in aws
+4. **Abrir la interfaz:**
+   Accede a `http://localhost:8000` en tu navegador.
 
+---
 
-	#Description: About the deployment
-
-	1. Build docker image of the source code
-
-	2. Push your docker image to ECR
-
-	3. Launch Your EC2 
-
-	4. Pull Your image from ECR in EC2
-
-	5. Lauch your docker image in EC2
-
-	#Policy:
-
-	1. AmazonEC2ContainerRegistryFullAccess
-
-	2. AmazonEC2FullAccess
-
-	
-## 3. Create ECR repo to store/save docker image
-
-	
-## 4. Create EC2 machine (Ubuntu) 
-
-## 5. Open EC2 and Install docker in EC2 Machine:
-	
-	
-	#optinal
-
-	sudo apt-get update -y
-
-	sudo apt-get upgrade
-	
-	#required
-
-	curl -fsSL https://get.docker.com -o get-docker.sh
-
-	sudo sh get-docker.sh
-
-	sudo usermod -aG docker ubuntu
-
-	newgrp docker
-	
-# 6. Configure EC2 as self-hosted runner:
-    setting>actions>runner>new self hosted runner> choose os> then run command one by one
-
-
-# 7. Setup github secrets:
-
-    AWS_ACCESS_KEY_ID
-
-    AWS_SECRET_ACCESS_KEY
-
-    AWS_REGION
-
-    AWS_ECR_LOGIN_URI
-
-    ECR_REPOSITORY_NAME
-
-# IP ADRESS: http://13.48.56.223:8080/
+**Nota:** Si necesitas más información o tienes alguna pregunta, no dudes en abrir un issue en el repositorio.
