@@ -75,7 +75,7 @@ class Evaluation:
         self._save_confusion_matrix()
 
     def save_score(self):
-         """
+        """
         Save the evaluation scores (loss and accuracy) to a JSON file for reference.
         """
         scores = {"loss": self.score[0], "accuracy": self.score[1]}
@@ -100,7 +100,7 @@ class Evaluation:
         plt.close()
 
     def log_into_mlflow(self):
-         """
+        """
         Log the evaluation metrics and model parameters into MLflow.
         Registers the model if a model registry is available.
         """

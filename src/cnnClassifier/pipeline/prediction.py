@@ -6,7 +6,7 @@ import os
 
 
 class PredictionPipeline:
-     """
+    """
     The `PredictionPipeline` class handles the prediction process for image classification.
     It takes an image file as input, processes it, and uses a pre-trained model to predict the class of the image.
 
@@ -43,7 +43,7 @@ class PredictionPipeline:
 
         if result[0] == 1:
             prediction = 'Adenocarcinoma Cancer'
-            return [{ "image" : prediction}]
+            return {prediction}
         else:
             prediction = 'Normal'
-            return [{ "image" : prediction}]
+            return {prediction}
