@@ -7,26 +7,26 @@ from cnnClassifier.utils.common import decodeImage
 from cnnClassifier.pipeline.prediction import PredictionPipeline
 from fastapi.templating import Jinja2Templates
 
-# Configuraciones de entorno
+# Environment settings
 os.environ['LANG'] = 'en_US.UTF-8'
 os.environ['LC_ALL'] = 'en_US.UTF-8'
 
-# Inicializar FastAPI
+# Initialize FastAPI
 app = FastAPI()
 
-# Configuración de CORS
+# CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Puedes restringir los orígenes en producción
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Directorio de plantillas
+# Template directory
 templates = Jinja2Templates(directory="templates")
 
-# Clase de configuración para el cliente
+# Configuration class for the client
 class ClientApp:
     def __init__(self):
         self.filename = "inputImage.jpg"
@@ -34,22 +34,22 @@ class ClientApp:
 
 clApp = ClientApp()
 
-# Modelo Pydantic para la entrada JSON
+# Pydantic model for JSON input
 class ImageRequest(BaseModel):
     image: str
 
-# Rutas FastAPI
+# FastAPI routes
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """
-    Ruta de inicio que renderiza el archivo HTML.
+    Home route that renders the HTML file.
     """
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/train")
 async def train_route():
     """
-    Ruta para entrenar el modelo ejecutando un script.
+    Route to train the model by running a script.
     """
     os.system("python main.py")
     return {"message": "Training done successfully!"}
@@ -57,7 +57,7 @@ async def train_route():
 @app.post("/predict")
 async def predict_route(image_request: ImageRequest):
     """
-    Ruta para realizar predicciones basadas en la imagen enviada.
+    Route to make predictions based on the provided image.
     """
     try:
         decodeImage(image_request.image, clApp.filename)
@@ -66,7 +66,7 @@ async def predict_route(image_request: ImageRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error during prediction: {str(e)}")
 
-# Punto de entrada principal
+# Main entry point
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)
