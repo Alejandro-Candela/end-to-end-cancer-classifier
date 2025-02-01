@@ -1,116 +1,188 @@
-# Sistema de Detección Automatizada de Adenocarcinomas Pulmonares
+# Automated Pulmonary Adenocarcinoma Detection System
 
-## Descripción del Proyecto
+## Project Description
 
-Este trabajo desarrolla un sistema de detección automatizada de adenocarcinomas pulmonares mediante el análisis de imágenes médicas, implementado como una aplicación web. El sistema permite a los usuarios cargar imágenes a través de una interfaz intuitiva, las cuales son procesadas por una API que ejecuta un modelo de clasificación de imágenes basado en técnicas avanzadas de aprendizaje profundo. El modelo proporciona un diagnóstico binario sobre la presencia o ausencia de adenocarcinomas.
+This work develops an automated detection system for pulmonary adenocarcinomas through the analysis of medical images, implemented as a web application. The system allows users to upload images via an intuitive interface, which are processed by an API running an image classification model based on advanced deep learning techniques. The model provides a binary diagnosis regarding the presence or absence of adenocarcinomas.
 
-Además del objetivo clínico, este proyecto se centra en la creación de una plantilla modular y estructurada que abarca todas las etapas del flujo de trabajo típico en la clasificación de imágenes. La arquitectura propuesta integra componentes como:
+In addition to the clinical objective, this project focuses on creating a modular and structured template that covers all stages of the typical workflow in image classification. The proposed architecture integrates components such as:
 
-- Preprocesamiento de datos
-- Modelado
-- Despliegue
-- Gestión del código
+- Data preprocessing
+- Modeling
+- Deployment
+- Code management
 
-Este enfoque garantiza escalabilidad, mantenibilidad y facilita la replicación del sistema para abordar problemas similares en el ámbito de la visión por computadora.
+This approach ensures scalability, maintainability, and facilitates the replication of the system to address similar problems in the field of computer vision.
 
-## Metodología
+## Methodology
 
-### 1. Recopilación de Datos
+### 1. Data Collection
 
-Se utilizó el conjunto de datos de adenocarcinoma pulmonar disponible en Kaggle, compuesto por imágenes categorizadas en dos clases:
+The pulmonary adenocarcinoma dataset available on Kaggle was used, consisting of images categorized into two classes:
 
-- Presencia de adenocarcinomas
-- Ausencia de adenocarcinomas
+- Presence of adenocarcinomas
+- Absence of adenocarcinomas
 
-Las imágenes fueron preprocesadas para ajustarse al tamaño requerido por la arquitectura VGG16 (224x224 píxeles) y normalizadas al rango [0, 1].
+The images were preprocessed to conform to the size required by the VGG16 architecture (224x224 pixels) and normalized to the [0, 1] range.
 
-### 2. Aumento de Datos
+### 2. Data Augmentation
 
-Para mejorar la generalización del modelo y evitar el sobreajuste, se implementaron técnicas de aumento de datos:
+To improve the model’s generalization and avoid overfitting, data augmentation techniques were implemented:
 
-- Rotaciones de hasta 15 grados
-- Escalado aleatorio
-- Traslación horizontal y vertical
-- Reflejo horizontal
+- Rotations of up to 15 degrees
+- Random scaling
+- Horizontal and vertical translations
+- Horizontal flipping
 
-### 3. Modelo Utilizado
+### 3. Model Used
 
-Se utilizó la arquitectura VGG16 con pesos preentrenados en ImageNet. Las capas fully connected originales fueron reemplazadas por un clasificador denso que incluye:
+The VGG16 architecture with pre-trained weights on ImageNet was used. The original fully connected layers were replaced by a dense classifier that includes:
 
-- Una capa completamente conectada con 256 unidades y activación ReLU
-- Dropout del 50% para reducir el sobreajuste
-- Una capa final con activación sigmoide para predicciones binarias
+- A fully connected layer with 256 units and ReLU activation
+- A 50% dropout to reduce overfitting
+- A final layer with sigmoid activation for binary predictions
 
-### 4. Entrenamiento del Modelo
+### 4. Model Training
 
-El modelo fue entrenado utilizando:
+The model was trained using:
 
-- Función de pérdida: `binary_crossentropy`
-- Optimizador: Adam (tasa de aprendizaje inicial: 0.01)
-- Épocas: 30
-- Tamaño de lote: 16
-- División del conjunto de datos: 80% para entrenamiento, 20% para validación
+- Loss function: `binary_crossentropy`
+- Optimizer: Adam (initial learning rate: 0.01)
+- Epochs: 30
+- Batch size: 16
+- Data split: 80% for training, 20% for validation
 
-### 5. Evaluación del Modelo
+### 5. Model Evaluation
 
-Se evaluó el desempeño mediante las métricas de precisión (accuracy) y pérdida (loss) en el conjunto de validación. También se generaron gráficos para monitorear las curvas de precisión y pérdida durante el entrenamiento.
+Performance was evaluated using the metrics of accuracy and loss on the validation set. Graphs were also generated to monitor the accuracy and loss curves during training.
 
-## Resultados
+## Results
 
-### Principales Métricas
+### Key Metrics
 
-- **Pérdida (loss):** 0.048
-- **Precisión (accuracy):** 99.02%
+- **Loss:** 0.048
+- **Accuracy:** 99.02%
 
-### Observaciones
+### Observations
 
-- El modelo mostró una alta capacidad para distinguir entre imágenes con y sin adenocarcinomas.
-- Se identificaron falsos positivos y negativos principalmente en imágenes de baja resolución o con artefactos, resaltando la importancia de datos de alta calidad.
+- The model demonstrated a high ability to distinguish between images with and without adenocarcinomas.
+- False positives and negatives were mainly identified in low-resolution images or those with artifacts, highlighting the importance of high-quality data.
 
-### Gráficas
+### Graphs
 
-Las curvas de precisión y pérdida mostraron una convergencia estable, evidenciando un buen ajuste sin signos significativos de sobreajuste.
+The accuracy and loss curves showed stable convergence, evidencing a good fit without significant signs of overfitting.
 
-## Conclusión
+## Conclusion
 
-El sistema desarrollado alcanzó una precisión del 99.02% en la detección de adenocarcinomas pulmonares. Además, la plantilla modular diseñada facilita su aplicación a otros problemas de clasificación de imágenes, ofreciendo un enfoque reutilizable y escalable.
+The developed system achieved an accuracy of 99.02% in the detection of pulmonary adenocarcinomas. Moreover, the designed modular template facilitates its application to other image classification problems, offering a reusable and scalable approach.
 
-### Limitaciones
+### Limitations
 
-- Sensibilidad a imágenes de baja resolución
-- Presencia de falsos positivos y negativos en ciertos escenarios
+- Sensitivity to low-resolution images
+- Presence of false positives and negatives in certain scenarios
 
-### Futuras Líneas de Trabajo
+### Future Work
 
-1. Integrar herramientas de explainability como Grad-CAM para interpretar las predicciones del modelo.
-2. Evaluar el sistema en un entorno clínico real con datos en tiempo real.
-3. Explorar técnicas adicionales como superresolución para mejorar la robustez frente a imágenes de baja calidad.
+1. Integrate explainability tools such as Grad-CAM to interpret the model’s predictions.
+2. Evaluate the system in a real clinical environment with real-time data.
+3. Explore additional techniques such as super-resolution to improve robustness against low-quality images.
 
-## Cómo Usar Este Proyecto
+## How to Use This Project
 
-1. **Instalar dependencias:**
+1. **Install dependencies:**
 
    ```bash
    conda env create -f environment.yml
    conda activate cnn-cancer-classifier
    ```
 
-2. **Ejecutar pipeline con DVC:**
+2. **Run the pipeline with DVC:**
 
    ```bash
    dvc init
    dvc repro
    ```
 
-3. **Ejecutar la aplicación web:**
+3. **Run the web application:**
 
    ```bash
    python app.py
    ```
 
-4. **Abrir la interfaz:**
-   Accede a `http://localhost:8080` en tu navegador.
+4. **Open the interface:**
+   Access `http://localhost:8080` in your browser.
 
 ---
 
-**Nota:** Si necesitas más información o tienes alguna pregunta, no dudes en abrir un issue en el repositorio.
+**Note:** If you need more information or have any questions, feel free to open an issue in the repository.
+
+```mermaid
+graph TB
+    User((External User))
+
+    subgraph "Web Application"
+        FastAPI["Web Server<br>(FastAPI)"]
+        Templates["Template Engine<br>(Jinja2)"]
+        PredictionService["Prediction Service<br>(Python)"]
+    end
+
+    subgraph "ML Pipeline System"
+        direction TB
+        
+        subgraph "Data Pipeline"
+            DataIngestion["Data Ingestion<br>(Python)"]
+            DataPreprocessing["Data Preprocessing<br>(TensorFlow)"]
+        end
+
+        subgraph "Model Management"
+            BaseModel["Base Model Preparation<br>(TensorFlow)"]
+            ModelTrainer["Model Trainer<br>(TensorFlow)"]
+            ModelEvaluator["Model Evaluator<br>(MLflow)"]
+        end
+
+        subgraph "Configuration Management"
+            ConfigManager["Configuration Manager<br>(YAML)"]
+            EntityConfig["Entity Configuration<br>(Python Dataclasses)"]
+        end
+
+        subgraph "Storage"
+            ArtifactsStore["Artifacts Storage<br>(Local FileSystem)"]
+            ModelRegistry["Model Registry<br>(MLflow)"]
+        end
+    end
+
+    subgraph "External Services"
+        GoogleDrive["Google Drive<br>(Data Source)"]
+        MLflowServer["MLflow Server<br>(Tracking Server)"]
+    end
+
+    %% Relationships
+    User -->|"Interacts with"| FastAPI
+    FastAPI -->|"Uses"| Templates
+    FastAPI -->|"Triggers"| PredictionService
+    FastAPI -->|"Initiates Training"| DataIngestion
+
+    PredictionService -->|"Loads Model"| ModelRegistry
+    
+    DataIngestion -->|"Downloads Data"| GoogleDrive
+    DataIngestion -->|"Stores Data"| ArtifactsStore
+    DataIngestion -->|"Feeds Data"| DataPreprocessing
+    
+    DataPreprocessing -->|"Prepares Data for"| BaseModel
+    BaseModel -->|"Initializes"| ModelTrainer
+    ModelTrainer -->|"Trains"| ModelRegistry
+    ModelEvaluator -->|"Evaluates"| ModelRegistry
+    ModelEvaluator -->|"Logs Metrics"| MLflowServer
+
+    ConfigManager -->|"Configures"| DataIngestion
+    ConfigManager -->|"Configures"| BaseModel
+    ConfigManager -->|"Configures"| ModelTrainer
+    ConfigManager -->|"Configures"| ModelEvaluator
+    
+    EntityConfig -->|"Defines Structure for"| ConfigManager
+
+    %% Style
+    classDef container fill:#e6e6e6,stroke:#333,stroke-width:2px;
+    classDef component fill:#fff,stroke:#666,stroke-width:1px;
+    class FastAPI,Templates,PredictionService container;
+    class DataIngestion,DataPreprocessing,BaseModel,ModelTrainer,ModelEvaluator,ConfigManager,EntityConfig,ArtifactsStore,ModelRegistry component;
+```
